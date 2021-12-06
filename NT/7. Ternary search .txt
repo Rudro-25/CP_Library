@@ -1,0 +1,41 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+#define      PSB         push_back
+#define      ll          long long
+#define      FastIO      ios::sync_with_stdio(0);cin.tie(0); cout.tie(0);
+
+const int NC=10005;
+constexpr ll mod = 1e9  + 7;
+
+void f(){
+  // do something
+}
+
+int main(){
+  FastIO
+
+  ll n;
+  //cin>>n;
+  //vector<ll> a(n);
+  //for(ll i=0;i<n;i++) cin>>a[i];
+
+
+  ll l=0,r=n-1;
+  while(l<r){
+    ll mid=(l+r)/2;
+
+    if(f(mid)>f(mid+1))
+        r=mid;
+    else l=mid;
+
+  }
+
+  ll ans=l+1;
+
+  return 0;
+}
+
+/*
+
+*/

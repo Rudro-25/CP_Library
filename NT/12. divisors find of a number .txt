@@ -1,0 +1,45 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+#define      PSB         push_back
+#define      MP          make_pair
+#define      ll          long long
+#define      FastIO      ios::sync_with_stdio(0);cin.tie(0); cout.tie(0);
+constexpr ll mod = 1e9  + 7;
+const ll N=3e6+5;
+const ll INF =1e18;
+
+vector<ll> divisors;
+void divs(ll n){
+    for(ll i=1;i*i<=n;i++){
+        if(n%i==0){
+            divisors.push_back(i);
+            if(n/i!=i) divisors.push_back(n/i);
+        }
+    }
+}
+
+int main(){
+  FastIO
+
+    ll n; cin>>n;
+
+    divs(n);
+
+    sort(divisors.begin(),divisors.end());
+    cout<<"No of divisors: "<<divisors.size()<<endl;
+    for(auto it: divisors)
+        cout<<it<<' ';
+
+
+
+  return 0;
+}
+/*
+20
+
+ans:
+No of divisors: 6
+1 2 4 5 10 20
+*/
+

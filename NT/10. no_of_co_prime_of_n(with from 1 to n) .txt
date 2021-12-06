@@ -1,0 +1,47 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+#define      PSB         push_back
+#define      ll          long long
+#define      FastIO      ios::sync_with_stdio(0);cin.tie(0); cout.tie(0);
+
+const int NC=10005;
+constexpr ll mod = 1e9  + 7;
+
+ll n;
+// no of co-prime of n with other 1 to n number.
+ll co_prime_of_n(ll n){       //////root(n) complexity
+  ll result =n;
+  for(ll i=2;i*i<=n;i++){
+    if(n%i==0){
+        while(n%i==0)
+            n/=i;
+        result-=result/i;
+    }
+  }
+  if(n>1){
+     result-=result/n;
+  }
+  return result;
+}
+
+int main(){
+  FastIO
+
+  cin>>n; 
+
+  ll ans=co_prime_of_n(n);
+
+  cout<<ans<<endl;
+
+  return 0;
+}
+
+/*
+3
+ans:
+2 // 1 2
+
+4
+ans: 2 //1 3
+*/

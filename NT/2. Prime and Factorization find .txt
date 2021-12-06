@@ -1,0 +1,59 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+#define      PSB         push_back
+#define      ll          long long
+#define      FastIO      ios::sync_with_stdio(0);cin.tie(0); cout.tie(0);
+
+const ll MAX = 1e6;
+vector<int> Primes;
+bool isPrime[MAX+1];
+void sieve(){ //precalculate
+  for(int i=0;i<=MAX;++i) isPrime[i]=true;
+  for(int i=3;i*i<=MAX;i+=2){
+    if(isPrime[i]){
+        for(int j=i*i;j<=MAX;j+=i){
+            isPrime[j]=false;
+        }
+    }
+  }
+  Primes.PSB(2);
+  for(int i=3;i<=MAX;i+=2)
+    if(isPrime[i]) Primes.PSB(i);
+}
+
+vector<int>Factorization;
+void PrimeFactorize(int n){
+    Factorization.clear();
+  for(int i=0;Primes[i]*Primes[i]<=n&& i<Primes.size();++i){
+    if(n%Primes[i]==0){
+        while(n%Primes[i]==0){
+            n/=Primes[i];
+            Factorization.PSB(Primes[i]);
+        }
+    }
+  }
+  if(n>1) Factorization.PSB(n);
+  //PrimeFactorize(n);
+}
+
+int main(){
+  FastIO
+  sieve();
+
+  ll n,r;
+  cin>>n;
+  PrimeFactorize(n);
+
+  for(auto it: Factorization)
+    cout<<it<<' ';
+  cout<<endl;
+
+  return 0;
+}
+
+/*
+30
+
+ans: 2 3 5
+*/

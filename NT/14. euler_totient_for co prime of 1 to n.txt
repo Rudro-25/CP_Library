@@ -1,0 +1,35 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+#define mx 107
+int phi[mx];
+long long phiSum[mx];
+
+//phi[x] present the no of co-prime between (1 to n) with n
+void euler_totient() {
+    for(int i=0; i<mx; i++) phi[i]=i;
+    for(int i=2; i<mx; i++) {
+        if(phi[i]==i) {
+            for(int j=i; j<mx; j+=i)
+                phi[j]-=(phi[j]/i);
+        }
+    }
+}
+
+int main() {
+
+    euler_totient();
+    int n; cin>>n;
+    for(int i=1;i<n;i++) cout<<phi[i]<<" "; cout<<endl;
+
+
+    return 0;
+}
+
+/*
+20
+
+ans:
+1 1 2 2 4 2 6 4 6 4 10 4 12 6 8 8 16 6 18
+*/

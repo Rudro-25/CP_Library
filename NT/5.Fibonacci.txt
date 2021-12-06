@@ -1,0 +1,36 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+#define      PSB         push_back
+#define      ll          long long
+#define      FastIO      ios::sync_with_stdio(0);cin.tie(0); cout.tie(0);
+
+const int NC=10005;
+constexpr ll mod = 1e9  + 7;
+ll fib[NC];
+void fibonacci()
+{
+    ll i;
+    fib[0]=0,fib[1]=1;
+    for(i=2;i<NC;i++)
+        fib[i]=(fib[i-1]+fib[i-2])%mod;
+}
+
+int main(){
+  FastIO
+  fibonacci();
+
+  ll n;
+  cin>>n;
+
+  cout<<fib[n]<<endl; // 0 1 1 2 3 5 8 13 21 34 55.
+
+
+  return 0;
+}
+
+/*
+10
+
+ans: 55
+*/
