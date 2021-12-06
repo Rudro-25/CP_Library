@@ -1,0 +1,69 @@
+//find no of occurence of t in s
+
+#include <bits/stdc++.h>
+using namespace std;
+
+#define      PSB         push_back
+#define      MP          make_pair
+#define      ll          long long
+#define      FastIO      ios::sync_with_stdio(0);cin.tie(0); cout.tie(0);
+constexpr ll mod = 2038101041;
+constexpr ll base=2038079803;
+const ll N=3e6+5;
+const ll INF =1e18;
+
+ll hashval[N];
+
+int main(){
+  FastIO
+
+  ll test; cin>>test;
+  while(test--){
+       string s,t;
+       cin>>s>>t;
+
+       ll n=s.size(),m=t.size();
+       hashval[0]=0;
+       for(ll i=0;i<n;i++)
+        hashval[i+1]=((hashval[i]*base)+s[i])%mod;
+
+       ll hash=0;
+       for(ll i=0;i<m;i++)
+        hash=((hash*base)+t[i])%mod;
+
+       ll ans=0,pwr=1;
+
+       for(ll i=0;i<m;i++) pwr=(pwr*base) %mod;
+
+       for(ll i=m;i<=n;i++){
+        ll x=(hashval[i]-(hashval[i-m]*pwr)) %mod;
+        if(x<0) x+=mod;
+        if(x==hash) ans++;
+       }
+
+       cout<<ans<<endl;
+  }
+
+  return 0;
+}
+/*
+
+4
+axbyczd
+abc
+abcabcabcabc
+abc
+aabacbaabbaaz
+aab
+aaaaaa
+aa
+
+
+ans:
+0
+4
+2
+5
+
+*/
+

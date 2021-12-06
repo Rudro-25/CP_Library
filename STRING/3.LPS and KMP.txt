@@ -1,0 +1,69 @@
+//find Longest prefix suffix value and find a pattern in a string 
+//O(n)
+#include <bits/stdc++.h>
+using namespace std;
+
+#define      PSB         push_back
+#define      MP          make_pair
+#define      ll          long long
+#define      FastIO      ios::sync_with_stdio(0);cin.tie(0); cout.tie(0);
+constexpr ll mod = 1e9  + 7;
+const ll N=3e6+5;
+const ll INF =1e18;
+
+ll lps[N];
+void calcLPS(ll n, string s){
+  lps[0]=0;
+  for(ll i=1,k=0;i<n;i++){
+    while(k>0 && s[k]!=s[i])
+      k=lps[k-1];
+    if(s[i]==s[k]) k++;
+    lps[i]=k;
+    //cout<<k<<' ';
+  }
+}
+
+ll getMatches(ll textlen,string text,ll patlen,string pat){
+  calcLPS(patlen,pat);
+  ll matches=0;
+  for(ll i=0,q=0;i<textlen;i++){
+    while(q>0 && pat[q]!=text[i])
+      q=lps[q-1];
+    if(pat[q]==text[i]) q++;
+    if(q==patlen){
+      matches++;
+      q=lps[q-1];
+    }
+  }
+  return matches;
+}
+void init_code(){
+    #ifndef ONLINE_JUDGE
+    freopen("input.txt", "r", stdin);
+    freopen("output.txt", "w", stdout);
+    #endif 
+}
+
+
+int main(){
+  FastIO
+
+  init_code();
+  string s,pat;
+  cin>>s>>pat;
+
+  ll ans=getMatches(s.length(),s,pat.length(),pat);
+
+  cout<<ans<<endl;
+
+
+  return 0;
+}
+/*
+ababab
+ab
+
+ans:
+3
+*/
+
