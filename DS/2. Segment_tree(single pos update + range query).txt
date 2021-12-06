@@ -1,0 +1,95 @@
+//single position update and range query.
+
+#include <bits/stdc++.h>
+using namespace std;
+
+#define      PSB         push_back
+#define      MP          make_pair
+#define      ll          long long
+#define      FastIO      ios::sync_with_stdio(0);cin.tie(0); cout.tie(0);
+constexpr ll mod = 1e9  + 7;
+const ll N=5e6+5;
+const ll INF =1e18;
+
+ll arr[N],tree[N];
+void init(ll node,ll b,ll e){ // tree create based on 1 index tree
+   if(b==e){
+    tree[node]=arr[b];
+    return;
+   }
+   ll left=node*2LL;
+   ll right=node*2LL+1LL;
+   ll mid=(b + e)/2LL;
+   init(left,b,mid);
+   init(right,mid+1LL,e);
+   tree[node]=tree[left]+tree[right];
+   //tree[node]=max(tree[left],tree[right]);
+   //tree[node]=min(tree[left],tree[right]);
+}
+//Tree(! index based)
+// index- 0 1 2 3  4 5  6 7 8  9 10 11 12 13
+// value- 0 8 5 3 -5 10 1 2 4 -9 3  7  1  0
+ll query(ll node,ll b,ll e,ll i,ll j){ //[i,j] er max/min/sum
+  if(i>e || j<b)
+    return 0;
+  if(b>=i && e<=j)
+    return tree[node];
+  ll left=node*2LL;
+  ll right=node*2LL+1LL;
+  ll mid=(b + e)/2LL;
+  ll p1=query(left,b,mid,i,j);
+  ll p2=query(right,mid+1LL,e,i,j);
+  return p1+p2;
+  //return max(p1,p2);
+  //return min(p1,p2);
+}
+void update(ll node,ll b,ll e,ll i,ll newvalue){ // i pos e newvalue assign + oi node related shob node update
+  if(i>e || i<b)
+    return;
+  if(b>=i && e<=i){
+    tree[node]=newvalue;
+    return;
+  }
+  ll left=node*2LL;
+  ll right=node*2LL+1LL;
+  ll mid=(b + e)/2LL;
+  update(left,b,mid,i,newvalue);
+  update(right,mid+1LL,e,i,newvalue);
+  tree[node]=tree[left]+tree[right];
+  //tree[node]=max(tree[left],tree[right]);
+  //tree[node]=min(tree[left],tree[right]);
+}
+
+int main(){
+  FastIO
+
+    ll n;
+    cin>>n;
+    for(ll i=1;i<=n;i++) cin>>arr[i];
+
+    init(1LL,1LL,n);
+    ll l,r; cin>>l>>r;
+    ll bal=query(1LL,1LL,n,l,r);
+    cout<<bal<<endl;
+    ll x,pos; cin>>pos>>x;
+    update(1LL,1LL,n,pos,x); //
+    cin>>l>>r;
+    bal=query(1LL,1LL,n,l,r);
+    cout<<bal<<endl;
+
+  return 0;
+}
+/*
+7
+4 -9 3 7 1 0 2
+3 5
+5 8
+2 6
+
+
+ans:
+11  // range sum
+9  // after update range sum
+
+*/
+
