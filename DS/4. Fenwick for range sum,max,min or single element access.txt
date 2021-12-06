@@ -1,0 +1,79 @@
+// range sum/max/min and single element update
+// complexity like segment(logn) but less space complexity just
+
+#include <bits/stdc++.h>
+#include <stdio.h>
+
+using namespace std;
+using ll = long long;
+
+#define mx 10000
+int ar[mx];
+int tree[mx];
+
+int query(int idx){
+    int sum = 0;
+    while (idx > 0){
+        sum += tree[idx];
+        idx -= (idx & -idx);
+    }
+    return sum;
+}
+
+void update(int idx, int val, int n){
+    while (idx <= n){
+        tree[idx] += val;
+        idx += (idx & -idx);
+    }
+}
+// index: 1 2 3 4 5 6 7 8  9 10 11 12 13 14 15 16
+// array: 1 0 2 1 1 3 0 4  2 5  2  2  3  1  0  2
+// tree:  1 1 2 4 1 4 0 12 2 7  2  11 3  4  0  29
+// tree
+// range: 1 1..2 3 1..4 5 5..6 7 1..8 9 9..10 11 9..12 13 1..14 15 1..16
+
+void print(int *ar, int n) {
+    for (int i = 1; i <= n; ++i) {
+        cout << ar[i] << " ";
+    }
+    puts("");
+}
+
+int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+
+    int n; cin >> n;
+    for (int i = 1; i <= n; ++i) {
+        cin >> ar[i];
+        update(i, ar[i], n);
+    }
+
+   /* cout << "input array:\t";
+    print(ar, n);
+    cout << "\n";
+
+    cout << "tree array:\t";
+    print(tree, n);
+    cout << "\n";*/
+    ll l,r; cin>>l>>r;
+    cout<<query(r)-query(l-1)<<endl;
+
+    ll x,val; cin>>x>>val;
+    update(x,val,n);
+
+    cin>>l>>r;
+    cout<<query(r)-query(l-1)<<endl;
+
+    return 0;
+}
+/*
+16
+1 0 2 1 1 3 0 4  2 5  2  2  3  1  0  2
+6 9
+7 2
+5 9
+ans:
+9
+12
+*/

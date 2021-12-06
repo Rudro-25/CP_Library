@@ -1,0 +1,77 @@
+//2nd way
+//find range sum/max/min + single pos update in logn
+
+#include <bits/stdc++.h>
+using namespace std;
+
+#define      PSB         push_back
+#define      MP          make_pair
+#define      ll          long long
+#define      FastIO      ios::sync_with_stdio(0);cin.tie(0); cout.tie(0);
+constexpr ll mod = 1e9  + 7;
+const ll N=3e6+5;
+
+int n;  // array size
+int t[2 * N];
+
+// index:  1  2  3  4  5 6 7 8 9 10 11 12 13 14 15
+// tree:   39 22 17 13 9 9 8 5 8 6  3  2  7  2  6
+void build() {  // build the tree for find sum based on 1 indexed
+  for (int i = n - 1; i > 0; --i)
+    t[i] = t[i<<1] + t[i<<1|1]; //sum
+    //t[i] = max(t[i<<1] , t[i<<1|1]); //max
+    //t[i] = min(t[i<<1] , t[i<<1|1]); //min
+}
+
+void modify(int p, int value) {  // set value at position p
+  for (t[p += n] = value; p > 1; p >>= 1)
+    t[p>>1] = t[p] + t[p^1]; // sum
+    //t[p>>1] = max(t[p] , t[p^1]); // max
+    //t[p>>1] = min(t[p] , t[p^1]); // min
+}
+
+int query(int l, int r) {  // sum on interval [l, r)
+  int res;
+  for (res=0,l += n, r += n; l < r; l >>= 1, r >>= 1) { //sum
+    if (l&1) res += t[l++];
+    if (r&1) res += t[--r];
+  }
+  /*for (res=-1e9,l += n, r += n; l < r; l >>= 1, r >>= 1) { //max
+    if (l&1) res =max(res, t[l++]);
+    if (r&1) res =max(res, t[--r]);
+  }*/
+  /*for (res=1e9,l += n, r += n; l < r; l >>= 1, r >>= 1) { //min
+    if (l&1) res =min(res, t[l++]);
+    if (r&1) res =min(res, t[--r]);
+  }*/
+  return res;
+}
+
+
+int main(){
+  FastIO
+
+    cin>>n;
+    for(ll i=0;i<n;++i) cin>>t[n+i];
+
+    build();
+    ll pos,val; cin>>pos>>val;;
+    modify(pos,val); // pos e val boshano
+
+    ll l,r; cin>>l>>r;
+    cout<<query(l,r+1)<<endl; // lto r inclusively sum/max/min
+
+
+  return 0;
+}
+/*
+8
+5 8 6 3 2 7 2 6
+0 1
+0 4
+
+ans:
+20
+
+*/
+
