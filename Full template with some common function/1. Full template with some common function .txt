@@ -1,0 +1,126 @@
+//Template with common all function ._.
+
+#include <bits/stdc++.h>
+#include <ext/pb_ds/assoc_container.hpp>
+#include <ext/pb_ds/tree_policy.hpp>
+using namespace std;
+using namespace __gnu_pbds;
+#define      inl(x)              scanf("%lld",&x)
+#define      in(x)               scanf("%d",&x)
+#define      ss(x)               scanf("%s",x)
+#define      sz(s)               (int)s.size()
+#define      bitcount            __builtin_popcountll
+#define      mxx                 LLONG_MAX
+#define      mnn                 LLONG_MIN
+#define      Y()                 cout<< "YES" <<endl
+#define      N()                 cout << "NO"<<endl
+#define      endl                "\n"
+#define      max_3(a,b,c)        max(a, max(b,c))
+#define      max_4(a,b,c,d)      max(a,max(b,max(c,d)))
+#define      min_3(a,b,c)        min(a, min(b,c))
+#define      min_4(a,b,c,d)      min(a,min(b,min(c,d)))
+#define      gcd(a,b)            __gcd(a,b)
+#define      lcm(a,b)           (a*b)/gcd(a,b)
+#define      loser               return 0
+#define      ll                  long long
+#define      PI                  acos(-1)
+#define      mem(a,v)            memset(a,v,sizeof(a))
+#define      SORT(v)             sort(v.begin(),v.end())
+#define      REV(v)              reverse(v.begin(),v.end())
+#define      O(x)                cout<<x<<endl
+#define      B                   begin()
+#define      E                   end()
+#define      V                   vector
+#define      F                   first
+#define      S                   second
+#define      PSB                 push_back
+#define      EMB                 emplace_back
+#define      MP                  make_pair
+#define      PII                 pair<int,int>
+#define      MII                 map<int,int>
+#define      flash               cout.flush()
+#define      FastIO      ios::sync_with_stdio(0);cin.tie(0); cout.tie(0);
+
+//order_set // lower bound find easily by x.find_by_order(i),x.order_of_key(k) , here x=new_data_set
+/*typedef tree<int, null_type, less_equal<int>, rb_tree_tag,
+        tree_order_statistics_node_update>
+        new_data_set; */
+
+
+const ll MOD = 998244353;
+constexpr ll mod = 1e9  + 7;
+
+constexpr ll mod = 1e9  + 7;
+const ll N=3e6+5;
+
+//move in a box
+int dx[8]={1,0,-1,0,1,1,-1,-1};
+int dy[8]={0,1,0,-1,-1,1,1,-1};
+//down,right,up,left,l-d,d-r,r-u,u-d.
+const int fx[]={+0,+0,+1,-1,-1,+1,-1,+1};   // Kings Move
+const int fy[]={-1,+1,+0,+0,+1,+1,-1,-1};  // Kings Move
+const int fx[]={-2, -2, -1, -1,  1,  1,  2,  2};  // Knights Move
+const int fy[]={-1,  1, -2,  2, -2,  2, -1,  1}; // Knights Move
+
+//vector dupli remove
+auto it=std:: unique(v.B,v.E);
+v.resize(std::distance(v.B,it));
+
+//some normal function
+bool primeCheck(ll n){if(n%2 == 0)return false; for(ll i=3;i*i<=n;i+=2){if(n%i == 0)return false;}return true;}
+int binaryToDecimal(string n){string num=n;int dec_value=0;int base=1;int len=num.length();for(int i=len-1;i>=0;i--){if(num[i]=='1')dec_value+=base;base=base*2;}return dec_value;}
+string twostringdigitsum(string a, string b){ string s=""; while(a.size()<b.size()) {a='0'+a;} while(a.size()>b.size()) {b='0'+b;} ll c=0;
+ for (ll i=a.size()-1;i>=0;i--){c+=(a[i]-'0')+(b[i]-'0'); s=char((c%10)+'0')+s; c/=10;} while(c>0){s=char((c%10)+'0')+s;c/=10;}return s;}
+ll stringdigitsum(string digits){ll num,total=0; for(int i = 0; i < digits.length(); i++){num = digits.at(i) - '0';assert(0 <= num && num <= 9);total += num;}return total;}
+ll integerdigitsum(ll n){ll sum=0;while(1){if(n<10){ sum+=n; break;}else{sum+=n%10;n/=10;}}return sum;}
+bool ispal(string s){ll i=0;ll j=s.size()-1;while(i<j){if(s[i]!=s[j]) return false;i++;j--;}return true;}
+ll fact(ll num){ll fac=1;while(num!=1){fac=fac*num;num--;}return fac;}
+string to_binary(int x) {string s;while(x > 0) {s += (x % 2 ? '1' : '0');x /= 2;}reverse(s.begin(), s.end());return s;}
+double quick_pow(double x, ll y){if(!y)  return 1.0;double ans = quick_pow(x,y>>1);ans *= ans;if(y&1)  ans *= x;return ans;}
+ll nsum(ll num){return (num*(num+1))/2;}
+
+// scan input : graph input
+const int N=2e5+5;
+void scan(ll &n) { scanf("%lld",&n) ; }
+void scan(ll &n, ll &m) { scanf("%lld%lld",&n,&m) ; }
+void scan(vector<ll> &v) { ll n = v.size() ; for(ll i=0 ;i<n;i++) scanf("%lld",&v[i]) ; }
+vector<ll> adj[N] ;
+ll vis[N] , lvl[N] ,lvl1[N],vis1[N] ;
+void edge (ll u , ll v) {
+    adj[u].PSB(v) ;
+    adj[v].PSB(u) ;
+}
+
+//Hidden print
+#define bug1(a)  cerr<<a<<endl;
+#define bug2(a,b)  cerr<<a<<" "<<b<<endl;
+#define bug3(a,b,c)  cerr<<a<<" "<<b<<" "<<c<<endl;
+
+//some overflow control mod
+void normal(ll &a) { if (a >= MOD) a %= MOD; (a < 0) && (a += MOD); }
+ll modMul(ll a, ll b) {normal(a), normal(b); return (a*b)%MOD; }
+ll modAdd(ll a, ll b) {normal(a), normal(b); return (a+b)%MOD; }
+ll modPow(ll b, ll p) { ll r = 1; while(p) { if(p&1) r = modMul(r, b); b = modMul(b, b); p >>= 1; } return r; } //if MOD is prime, modPow(b, p % (MOD-1))
+ll modInverse(ll a) { return modPow(a, MOD-2); }
+ll modDiv(ll a, ll b) { return modMul(a, modInverse(b)); }
+
+void solve(){
+   ll n,ans=0;
+   string s;
+   cin>>n;
+
+   //cout<<fixed<<setprecision(7)<<ans<<endl;
+   //cerr <<endl <<"[ Time : " << (float)clock() / CLOCKS_PER_SEC << " secs ]" << endl;
+}
+/*-----*/
+int main(){
+   InTheNameOfGod
+
+   ll Test=1;
+   //cin>>Test;
+   while(Test--){
+     solve();
+    }
+  loser;
+}
+
