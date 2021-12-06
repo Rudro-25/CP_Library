@@ -1,0 +1,48 @@
+//complexity: O(nW)
+
+#include <bits/stdc++.h>
+using namespace std;
+
+#define      PSB         push_back
+#define      MP          make_pair
+#define      ll          long long
+#define      FastIO      ios::sync_with_stdio(0);cin.tie(0); cout.tie(0);
+constexpr ll mod = 1e9  + 7;
+const ll N=3e6+5;
+const ll INF =1e18;
+
+ll n,W;
+ll cnt[N];
+
+int main(){
+  FastIO
+
+    cin>>n>>W;
+    for(ll i=1;i<=W;i++) cnt[i]=INF;
+    vector<ll> a(n);
+    for(ll i=0;i<n;i++) cin>>a[i];
+    sort(a.begin(),a.end());
+
+    for(ll i=1;i<=W;i++){
+        for(ll j=0;j<n;j++){
+            if(a[j]>i) break;
+            ll baki=i-a[j];
+            if(cnt[baki]!=INF) cnt[i]=min(cnt[i],1LL+cnt[baki]);
+        }
+    }
+
+    if(cnt[W]==INF) cout<<"Impossible"<<endl;
+    else cout<<cnt[W]<<endl;
+
+
+  return 0;
+}
+/*
+you have n coin , print min no of coin to make W cost
+5 22
+2 5 9 13 15
+
+ans:
+2 // (9+13)
+*/
+

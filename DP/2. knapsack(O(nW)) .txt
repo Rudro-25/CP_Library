@@ -1,0 +1,53 @@
+// complexity: O(nW)
+
+#include <bits/stdc++.h>
+using namespace std;
+
+#define      PSB         push_back
+#define      MP          make_pair
+#define      ll          long long
+#define      FastIO      ios::sync_with_stdio(0);cin.tie(0); cout.tie(0);
+constexpr ll mod = 1e9  + 7;
+const ll N=3e6+5;
+const ll INF =1e18;
+
+//Given weight and values of n items.
+//max capacity is W, find max total value can take by maintain W capacity.
+ll n,W;
+ll knapsack(ll W,ll wt[],ll val[],ll n){
+  ll k[n+1][W+1];
+  for(ll i=0;i<=n;i++){
+    for(ll w=0;w<=W;w++){
+        if(!i || !w) k[i][w]=0;
+        else if(wt[i-1]<=w)
+            k[i][w]=max(val[i-1]+k[i-1][w-wt[i-1]],k[i-1][w]);
+        else
+            k[i][w]=k[i-1][w];
+    }
+  }
+  return k[n][W];
+}
+
+int main(){
+  FastIO
+
+    cin>>n>>W;
+    ll val[n+1],wt[n+1];
+    for(ll i=0;i<n;i++) cin>>val[i];
+    for(ll i=0;i<n;i++) cin>>wt[i];
+
+    ll ans=knapsack(W,wt,val,n);
+
+    cout<<ans<<endl;
+
+  return 0;
+}
+/*
+3 50
+60 100 120
+10 20 30
+
+ans:
+220 // (100+120)=220 &&20+30<=50
+*/
+
