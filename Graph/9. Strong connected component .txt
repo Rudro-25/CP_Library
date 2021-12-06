@@ -1,0 +1,79 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+#define      PSB         push_back
+#define      ll          long long
+#define      FastIO      ios::sync_with_stdio(0);cin.tie(0); cout.tie(0);
+
+////Strong connected component: those node called SCC-j kno node jkno SCC er jkno node e jao jai ////
+//coms er modhe alada alada component gula store hoibe/. comp[i] er modher shob node diye j kno onno node e jao jabe//
+const int N=2e5+5;
+int n,timer;
+vector<vector<int>> g(N),comps;
+vector<int> dfn(N),low(N),instack(N),comp(N),stk;
+
+void SCC(int u) {
+	dfn[u] = low[u] = ++timer;
+	instack[u] = 1;
+	stk.push_back(u);
+	for (auto child : g[u]) {
+		if (!dfn[child]){//Not visitied
+			SCC(child);
+			// minimize ancestors of my child
+			low[u] = min(low[u], low[child]);
+		}
+		else if (instack[child]) { // visited in stack cycle
+			low[u] = min(low[u], dfn[child]); // you can minimize on dfsn
+									// it is useful in art point ^^
+		}
+	}
+	if (low[u] == dfn[u]) {
+		comps.push_back(vector<int>());
+		int x = -1;
+		while (x != u) {
+			x = stk.back(); stk.pop_back(); instack[x] = 0;
+			comps.back().push_back(x);
+			comp[x] = (int)comps.size() - 1;
+		}
+	}
+
+}
+
+int main(){
+  FastIO
+
+  ll n,m;
+  cin>>n>>m;
+
+  for(ll i=0;i<m;i++){
+        ll x,y; cin>>x>>y;
+        x--,y--;
+        g[x].PSB(y); //g[y].PSB(x);
+  }
+
+  for(ll i=0;i<n;i++) if(!dfn[i]) SCC(i);
+
+  cout<<"No of SCC: "<<comps.size()<<endl;
+  for(ll i=0;i<comps.size();i++){
+    for(ll j=0;j<comps[i].size();j++){
+        cout<<comps[i][j]+1<<' ';
+    }
+    cout<<endl;
+  }
+
+
+  return 0;
+}
+
+/*
+4 4
+1 2
+2 4
+4 1
+1 3
+
+ans:
+NO of SCC : 2
+3
+4 2 1
+*/

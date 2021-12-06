@@ -1,0 +1,67 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+#define      PSB         push_back
+#define      MP          make_pair
+#define      ll          long long
+#define      FastIO      ios::sync_with_stdio(0);cin.tie(0); cout.tie(0);
+constexpr ll mod = 1e9  + 7;
+const ll N=3e6+5;
+const ll INF =1e18;
+
+ll n,m;
+vector<vector<pair<int, int>>> adj(N);
+vector<ll> d;
+
+void zeroOne_bfs(ll s){
+    d.assign(n, INF);
+    d[s] = 0;
+    deque<ll> q;
+    q.push_front(s);
+    while (!q.empty()) {
+        ll v = q.front();
+        q.pop_front();
+        for (auto edge : adj[v]) {
+            int u = edge.first;
+            int w = edge.second;
+            if (d[v] + w < d[u]) {
+                d[u] = d[v] + w;
+                if (w == 1)
+                    q.push_back(u);
+                else
+                    q.push_front(u);
+            }
+        }
+    }
+}
+
+int main(){
+  FastIO
+
+    cin>>n>>m;  // n nodes and m edges.
+    for(ll i=0;i<m;i++){
+        ll a,b,w; cin>>a>>b>>w;
+        --a,--b;
+        adj[a].PSB(MP(b,w));
+        adj[b].PSB(MP(a,w));
+    }
+
+    zeroOne_bfs(0LL);
+
+    for(ll i=0;i<n;i++)
+        cout<<d[i]<<' ';
+    cout<<endl;
+
+  return 0;
+}
+/*
+4 4
+1 2 0
+1 3 1
+3 4 1
+2 4 1
+
+ans:
+0 0 1 1
+*/
+

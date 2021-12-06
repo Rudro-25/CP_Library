@@ -1,0 +1,89 @@
+//find distance from any node to node and also find lca
+
+#include <bits/stdc++.h>
+using namespace std;
+
+#define int long long
+
+const int N = 1e5 + 5;
+const int L = 20;
+const int INF = 1e18;
+
+vector <pair <int, int> > adj[N];
+int in[N];
+int out[N];
+int lift[N][L];
+int timer;
+int dis[N];
+
+void dfs(int root, int p) {
+    out[0] = INF;
+    in[root] = ++timer;
+    lift[root][0] = p;
+    for(int i = 1; i < L; i++) {
+       lift[root][i] = lift[lift[root][i-1]][i-1];
+    }
+    for(auto i : adj[root]) {
+         if(i.first != p) {
+             dis[i.first] = i.second + dis[root];
+             dfs(i.first, root);
+         }
+    }
+    out[root] = timer;
+}
+
+bool self(int p, int c) {
+    return (in[c] >= in[p] && in[c] <= out[p]);
+}
+
+int LCA(int x, int y) {
+    if(self(x, y)) return x;
+    if(self(y, x)) return y;
+
+    for(int i = L-1; i >= 0; i--) {
+        if(!self(lift[x][i], y)) {
+             x = lift[x][i];
+        }
+    }
+    return lift[x][0];
+}
+
+signed main() {
+  ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
+  int t=1; cin >> t;
+  while(t--) {
+    int n, q, r;
+    cin >> n >> q >> r;
+    for(int i = 1; i <= n; i++) {
+      adj[i].clear();
+      dis[i] = 0;
+      timer = 0;
+    }
+    for(int i = 1; i < n; i++) {
+      int x, y, w;
+      cin >> x >> y >> w;
+      adj[x].push_back({y,w});
+      adj[y].push_back({x,w});
+    }
+    dfs(r,0);
+    while(q--) {
+      int u, v;
+      cin >> u >> v;
+      int l = LCA(u,v);
+      int ans = dis[v] + dis[u] - 2*dis[l];
+      cout << ans << '\n';
+    }
+  }
+}
+
+/*
+1  // test case
+3 1 1 // n nodes, q query, root number then n-1 line edge with weight.
+1 2 5
+1 3 4
+2 3
+
+ans:
+9  //2->1->3
+*/
+

@@ -1,0 +1,70 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+#define      PSB         push_back
+#define      ll          long long
+#define      FastIO      ios::sync_with_stdio(0);cin.tie(0); cout.tie(0);
+constexpr ll mod = 1e9  + 7;
+const ll N=3e6+5;
+
+int n,m; // number of vertices and edge
+vector<ll> adj[N];  // adjacency list of graph
+vector<bool> visited;
+vector<int> ans;
+ll par[N];
+
+void dfs(int v) {
+    visited[v] = true;
+    for (int u : adj[v]) {
+        if (!visited[u])
+            dfs(u);
+    }
+    ans.push_back(v);
+}
+
+void topological_sort() {
+    visited.assign(n, false);
+    ans.clear();
+    for (int i = 0; i < n; ++i) {
+        if (!visited[i])
+            dfs(i);
+    }
+    reverse(ans.begin(), ans.end());
+}
+
+int main(){
+  FastIO
+
+  cin>>n>>m;
+  for(ll i=0;i<m;i++){
+    ll x,y; cin>>x>>y; //y depends on x
+    x--,y--;
+    ll bal=x;
+      while(par[bal]){
+         if(par[bal]==y) {cout<<"Impossible"<<endl;}
+         bal=par[bal];
+      }
+    adj[x].push_back(y);
+    par[y]=x;
+  }
+
+  topological_sort();
+
+  for(auto it: ans)
+    cout<<it+1<<' ';
+  cout<<endl;
+
+
+
+  return 0;
+}
+/*
+5 4
+1 2
+1 4
+1 5
+2 3
+
+ans:
+1 5 4 2 3
+*/

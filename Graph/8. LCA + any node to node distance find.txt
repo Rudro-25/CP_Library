@@ -1,0 +1,115 @@
+//find distance from any node to node and also find lca
+
+#include <bits/stdc++.h>
+
+using namespace std;
+
+typedef long long ll;
+#define pb push_back
+
+const int MOD = 1000000007;
+const char nl = '\n';
+const int MX = 100001; //check the limits, dummy
+
+int N;
+vector <pair <int, int> > graph[MX];
+ll wei[MX];
+const int L = 17;
+int anc[MX][L];
+int depth[MX];
+int parent[MX];
+
+int LCA(int a, int b) {
+    if (depth[a] < depth[b]) {
+        int c = b;
+        b = a;
+        a = c;
+    }
+
+    int dist = depth[a] - depth[b];
+    while (dist > 0) {
+        for(ll i=0;i<L;i++) {
+            if (dist & 1 << i) {
+                a = anc[a][i];
+                dist -= 1 << i;
+            }
+        }
+    }
+
+    if (a == b) return a;
+
+    for(ll j=(L)-1;j>=0;j--) {
+        if (anc[a][j] != -1 && anc[a][j] != anc[b][j]) {
+            a = anc[a][j]; b = anc[b][j];
+        }
+    }
+    return parent[a];
+}
+
+void parDFS(int v, int p, int d) {
+    parent[v] = p; depth[v] = d;
+    for(ll i=0;i<(int)(graph[v]).size();i++) {
+        int nxt = graph[v][i].first;
+        if (nxt == p) continue;
+        wei[nxt] = wei[v] + graph[v][i].second;
+        parDFS(nxt, v, d+1);
+    }
+}
+
+void preprocess() {
+    parDFS(0, -1, 0);
+    for(ll i=0;i<N;i++) for(ll j=0;j<L;j++) anc[i][j] = -1;
+    for(ll i=0;i<N;i++) anc[i][0] = parent[i];
+    for(ll j=1;j<L;j++) {
+         for(ll i=0;i<N;i++) {
+            if (anc[i][j-1] != -1) {
+                anc[i][j] = anc[anc[i][j-1]][j-1];
+            }
+        }
+    }
+}
+
+void solve() {
+
+    int  Q, R; cin >>N >> Q >> R;
+    for(ll i=0;i<N;i++) graph[i].clear();
+     for(ll i=0;i<N-1;i++) {
+        int X, Y, W; cin >> X >> Y >> W; X--; Y--;
+        graph[X].pb({Y, W});
+        graph[Y].pb({X, W});
+    }
+    wei[0] = 0;
+    preprocess();
+
+    while(Q--) {
+        int X, Y; cin >> X >> Y; X--; Y--;
+        int lc = LCA(X, Y);
+        cout << wei[X] + wei[Y] - wei[lc]*2 << nl;
+    }
+
+}
+
+int main() {
+	ios_base::sync_with_stdio(0); cin.tie(0);
+
+    int T = 1;
+    cin >> T;
+    while(T--) {
+        solve();
+    }
+
+	return 0;
+}
+
+/*
+1  // test case
+3 1 1 // n nodes, q query, root number then n-1 line edge with weight.
+1 2 5
+1 3 4
+2 3
+
+ans:
+9  //2->1->3
+*/
+
+

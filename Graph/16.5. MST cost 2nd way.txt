@@ -1,0 +1,82 @@
+//MST with kruskal + DSU
+//complexity: mlogm
+
+#include <bits/stdc++.h>
+using namespace std;
+
+#define      PSB         push_back
+#define      MP          make_pair
+#define      ll          long long
+#define      FastIO      ios::sync_with_stdio(0);cin.tie(0); cout.tie(0);
+constexpr ll mod = 1e9  + 7;
+const ll N=3e6+5;
+
+struct edge {
+    int u, v, w;
+    bool operator<(const edge& p) const
+    {
+        return w < p.w;
+    }
+};
+int pr[N];
+vector<edge> e;
+int find(int r)
+{
+    return (pr[r] == r) ? r : find(pr[r]);
+}
+int mst(int n)
+{
+    sort(e.begin(), e.end());
+    for (int i = 1; i <= n; i++)
+        pr[i] = i;
+
+    int count = 0, s = 0;
+    for (int i = 0; i < (int)e.size(); i++) {
+        int u = find(e[i].u);
+        int v = find(e[i].v);
+        if (u != v) {
+            pr[u] = v;
+            count++;
+            s += e[i].w;
+            if (count == n - 1)
+                break;
+        }
+    }
+    return s;
+}
+
+
+int main(){
+  FastIO
+
+    int n, m;
+    cin >> n >> m;
+    for (int i = 1; i <= m; i++) {
+        int u, v, w;
+        cin >> u >> v >> w;
+        edge get;
+        get.u = u;
+        get.v = v;
+        get.w = w;
+        e.push_back(get);
+    }
+
+    cout<<endl<<"Minimum spanning tree cost:"<<endl;
+    cout << mst(n) << endl;
+
+  return 0;
+}
+/*
+4 5
+1 2 2
+1 3 4
+2 3 1
+3 4 4
+2 4 5
+
+ans:
+Minimum spanning tree cost:
+7
+
+*/
+
