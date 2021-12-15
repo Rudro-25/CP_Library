@@ -1,0 +1,76 @@
+//https://cses.fi/problemset/task/1192
+
+#include <bits/stdc++.h>
+#include <ext/pb_ds/assoc_container.hpp>
+#include <ext/pb_ds/tree_policy.hpp>
+using namespace std;
+using namespace __gnu_pbds;
+
+#define      ll                  long long
+#define      pb                 push_back
+#define      mp                 make_pair
+#define      Y()                 cout<< "YES" <<endl
+#define      N()                 cout << "NO"<<endl
+#define      all(x)             x.begin(),x.end()
+#define      Ceil(x,y)           ((x+y-1)/y)
+#define      gcd(a,b)            __gcd(a,b)
+#define      lcm(a,b)           (a*b)/gcd(a,b)
+#define      InTheNameOfGod      ios::sync_with_stdio(0);cin.tie(0); cout.tie(0);
+
+template <typename T>
+using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_statistics_node_update>;
+
+constexpr ll mod = 1e9 + 7;
+const ll N=3e6+5;
+int dx[] = {0,0,1,-1};
+int dy[] = {1,-1,0,0};
+ll n,m;
+bool ck[1005][1005];
+
+void dfs(ll x,ll y){
+   ck[x][y]=true;
+   for(ll i=0;i<4;i++){
+      ll nx= x+dx[i],ny=y+dy[i];
+      if(nx>=0 && ny>=0 && nx<n && ny<m){
+         if(!ck[nx][ny]) { 
+            dfs(nx,ny);
+         }
+      }
+   }
+}
+
+void solve(){
+   ll ans=0;
+   cin>>n>>m;
+   char ch[n][m];
+
+   for(ll i=0;i<n;i++){
+      for(ll j=0;j<m;j++){
+         cin>>ch[i][j];
+         if(ch[i][j]=='#') ck[i][j]=true;
+         else ck[i][j]=false;
+      }
+   }
+
+   for(ll i=0;i<n;i++){
+      for(ll j=0;j<m;j++){
+         if(!ck[i][j]){
+            ++ans;
+            dfs(i,j);
+         }
+      }
+   }
+
+   cout<<ans<<endl;
+
+}
+
+int main(){
+   InTheNameOfGod;
+   ll Test=1;
+   //cin>>Test;
+   while(Test--){
+     solve();
+    }
+  return 0;
+}
