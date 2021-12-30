@@ -1,0 +1,121 @@
+//https://codeforces.com/edu/course/2/lesson/4/1/practice/contest/273169/problem/C
+//C. Number of Minimums on a Segment
+
+#include <bits/stdc++.h>
+using namespace std;
+
+#define      PSB         push_back
+#define      MP          make_pair
+#define      ll          long long
+#define      FastIO      ios::sync_with_stdio(0);cin.tie(0); cout.tie(0);
+constexpr ll mod = 1e9  + 7;
+const ll N=5e6+5;
+const ll INF =1e18;
+
+//Segment tree(1 based)
+struct seg{
+  ll sum,max,min,mncnt;
+};
+seg merge(seg a, seg b){
+  seg c;
+  c.sum = a.sum + b.sum ;
+  c.max = max( a.max , b.max );
+  c.min = min( a.min , b.min );
+  if(a.min == b.min) c.mncnt= a.mncnt + b.mncnt ;
+  else if(a.min < b.min) c.mncnt= a.mncnt;
+  else c.mncnt= b.mncnt;
+  return c;
+}
+
+ll a[N];
+seg b[4*N];
+
+void build(ll l, ll r, ll node){
+  if(l == r){
+    b[node].sum = a[l];
+    b[node].max = a[l];
+    b[node].min = a[l];
+    b[node].mncnt = 1;
+    return;
+  }
+  ll mid = (l + r)/2;
+  ll n1 = 2*node;
+  ll n2 = n1 + 1;
+  build(l, mid , n1);
+  build(mid+1, r, n2);
+  b[node] = merge(b[n1] , b[n2]);
+  return;
+}
+ 
+seg dummy(){
+  return {0,0,INF,0};
+}
+ 
+seg query(ll l, ll r, ll node, ll x, ll y){
+  if(y < l || x > r) return dummy();
+  if(x <= l && y >= r) return b[node];
+  ll mid = (l + r)/2;
+  ll n1 = 2*node;
+  ll n2 = n1 + 1;
+  return merge(query(l , mid , n1 , x , y) , query(mid+1 , r , n2 , x , y));
+}
+void update(ll l, ll r, ll node, ll x, ll v){
+  if(x < l || x > r) return;
+  if(l == r){
+    b[node].sum = v;
+    b[node].max = v;
+    b[node].min = v;
+    b[node].mncnt = 1;
+    return;
+  }
+  ll mid = (l + r)/2;
+  ll n1 = 2*node;
+  ll n2 = n1 + 1;
+  update(l, mid , n1, x , v);
+  update(mid+1, r, n2 , x , v);
+  b[node] = merge(b[n1] , b[n2]);
+}
+
+int main(){
+  FastIO
+
+    ll n,q;
+    cin>>n>>q;
+
+    for(ll i=1;i<=n;i++) cin>>a[i];
+
+    build(1,n,1);
+
+    while(q--){
+      ll t,l,r; cin>>t>>l>>r;
+      if(t==1){
+        update(1,n,1,l+1,r);
+      }
+      else{
+        seg A= query(1,n,1,l+1,r);
+        cout<<A.min<<' '<<A.mncnt<<endl;
+
+      }
+
+    }
+
+    
+
+  return 0;
+}
+/*
+//asking for 0 index of [L,r)
+5 5
+3 4 3 5 2
+2 0 3
+1 1 2
+2 0 3
+1 0 2
+2 0 5
+
+ans:
+3 2
+2 1
+2 3
+*/
+
