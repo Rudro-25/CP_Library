@@ -1,0 +1,119 @@
+//Trie_Or_Prefix-Tree
+//Find max xor subarray value 
+//Insert,serach,delete,no_of_prefix_of_S
+//every operation in O(height_of_tree)
+
+#include <bits/stdc++.h>
+#include <ext/pb_ds/assoc_container.hpp>
+#include <ext/pb_ds/tree_policy.hpp>
+using namespace std;
+using namespace __gnu_pbds;
+ 
+#define ll long long int
+#define pb push_back
+#define mp make_pair
+#define all(x) x.begin(),x.end()
+#define Max 10000000000000000
+#define min_heap priority_queue <ll, vector<ll>, greater<ll> >
+
+template <typename T>
+using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_statistics_node_update>;
+const ll N=2e6+5;
+
+ll node_id[N][2],ct;
+bool win[N],lose[N];
+bool visited[N];
+ll bit[30];
+void prec(){
+    bit[0]=1;
+    for(ll i=1;i<20;i++){
+        bit[i]= bit[i-1]*2LL;
+    }
+}
+
+void insert_in_trie(vector<int> v){
+    ll par_node=0;
+    for(ll i=0;i<v.size();i++){
+        if(node_id[par_node][v[i]]==-1)
+            node_id[par_node][v[i]]=++ct;
+        par_node=node_id[par_node][v[i]];
+    }
+}
+vector<int> query_in_trie(vector<int> v){
+    ll par_node=0;
+    vector<int> ans;
+    for(ll i=0;i<v.size();i++){
+        ll bal= !v[i];
+        if(node_id[par_node][bal]!=-1){
+            par_node=node_id[par_node][bal];
+            ans.pb(1);
+        }
+        else{
+           par_node=node_id[par_node][v[i]];
+           ans.pb(0);
+        }
+    }
+    if(ans.size()<20){
+        ll baki=20-ans.size();
+        for(ll j=0;j<baki;j++) ans.pb(0);
+    }
+    
+    return ans;
+}
+
+
+int main()
+{   
+    memset(node_id,-1,sizeof(node_id));
+    
+        ll n,q,ans=0;
+        prec();
+        vector<int> v;
+        for(ll i=0;i<20;i++) v.pb(0);
+        insert_in_trie(v);
+        cin>>n;
+        ll x_or=0;
+        for(ll i=0;i<n;i++){
+            ll a; cin>>a;
+            x_or= (x_or^a);
+            ll bal=x_or;
+            v.clear();
+            while(x_or){
+                if(x_or%2) v.pb(1); else v.pb(0);
+                x_or/=2;
+            }
+            //reverse(all(v));
+            if(v.size()<20){
+                ll baki=20-v.size();
+                for(ll j=0;j<baki;j++) v.pb(0);
+            }
+            reverse(all(v));
+            vector<int> vv= query_in_trie(v);
+            reverse(all(vv));
+            ll res=0;
+            for(ll i=0;i<vv.size();i++){
+               res+= bit[i]*vv[i];
+            }
+            ans=max(ans,res);
+            insert_in_trie(v);
+            x_or=bal;
+        }
+
+        cout<<ans<<endl;
+        
+
+
+    return 0;
+}
+/*
+5 
+3 7 7 7 0
+
+ans: 7  (7)
+
+5 
+3 8 2 6 4
+
+ans: 15  (3 8 2 6)
+
+*/

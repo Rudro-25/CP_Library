@@ -1,0 +1,123 @@
+//Trie_Or_Prefix-Tree
+//Find max xor value from the array with a input
+//Insert,serach,delete,no_of_prefix_of_S
+//every operation in O(height_of_tree)
+
+#include <bits/stdc++.h>
+#include <ext/pb_ds/assoc_container.hpp>
+#include <ext/pb_ds/tree_policy.hpp>
+using namespace std;
+using namespace __gnu_pbds;
+ 
+#define ll long long int
+#define pb push_back
+#define mp make_pair
+#define all(x) x.begin(),x.end()
+#define Max 10000000000000000
+#define min_heap priority_queue <ll, vector<ll>, greater<ll> >
+
+template <typename T>
+using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_statistics_node_update>;
+const ll N=2e6+5;
+
+ll node_id[N][2],ct;
+bool win[N],lose[N];
+bool visited[N];
+ll bit[30];
+void prec(){
+    bit[0]=1;
+    for(ll i=1;i<20;i++){
+        bit[i]= bit[i-1]*2LL;
+    }
+}
+
+void insert_in_trie(vector<int> v){
+    ll par_node=0;
+    for(ll i=0;i<v.size();i++){
+        if(node_id[par_node][v[i]]==-1)
+            node_id[par_node][v[i]]=++ct;
+        par_node=node_id[par_node][v[i]];
+    }
+}
+vector<int> query_in_trie(vector<int> v){
+    ll par_node=0;
+    vector<int> ans;
+    for(ll i=0;i<v.size();i++){
+        ll bal= !v[i];
+        if(node_id[par_node][bal]!=-1){
+            par_node=node_id[par_node][bal];
+            ans.pb(1);
+        }
+        else{
+           par_node=node_id[par_node][v[i]];
+           ans.pb(0);
+        }
+    }
+    if(ans.size()<20){
+        ll baki=20-ans.size();
+        for(ll j=0;j<baki;j++) ans.pb(0);
+    }
+    
+    return ans;
+}
+
+
+int main()
+{   
+    memset(node_id,-1,sizeof(node_id));
+    
+        ll n,q;
+        prec();
+        cin>>n>>q;
+        for(ll i=0;i<n;i++){
+            ll a; cin>>a;
+            vector<int> v;
+            while(a){
+                if(a%2) v.pb(1); else v.pb(0);
+                a/=2;
+            }
+            //reverse(all(v));
+            if(v.size()<20){
+                ll baki=20-v.size();
+                for(ll j=0;j<baki;j++) v.pb(0);
+            }
+            reverse(all(v));
+            insert_in_trie(v);
+        }
+         ll root=0;
+        while(q--){
+            ll k; cin>>k;
+            vector<int> v;
+            while(k){
+                if(k%2) v.pb(1); else v.pb(0);
+                k/=2;
+            }
+            if(v.size()<20){
+                ll baki=20-v.size();
+                for(ll j=0;j<baki;j++) v.pb(0);
+            }
+            reverse(all(v));
+            vector<int> ans= query_in_trie(v);
+            reverse(all(ans));
+            ll res=0;
+            for(ll i=0;i<ans.size();i++){
+               res+= bit[i]*ans[i];
+            }
+
+            cout<<res<<endl;
+        }
+        
+
+
+    return 0;
+}
+/*
+2 2
+21 25
+31
+13
+
+ans:
+10 (31^21)
+24 (5^21)
+*/

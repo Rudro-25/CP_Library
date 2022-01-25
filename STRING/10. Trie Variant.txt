@@ -1,0 +1,5 @@
+Problem3: Given an array of positive integers you have to print the number of subarrays whose XOR is less than K.
+
+Link: https://threadsiiithyderabad.quora.com/Tutorial-on-Trie-and-example-problems
+
+pb link: http://www.spoj.com/problems/SUBXOR
