@@ -1,0 +1,140 @@
+//Find 2 tree Indentical Or Not.
+//O(E+V)
+
+#include <bits/stdc++.h>
+#include <ext/pb_ds/assoc_container.hpp>
+#include <ext/pb_ds/tree_policy.hpp>
+using namespace std;
+using namespace __gnu_pbds;
+
+#define      ll                  long long
+#define      pb                 push_back
+#define      mp                 make_pair
+#define      all(x)             x.begin(),x.end()
+#define      Ceil(x,y)           ((x+y-1)/y)
+#define      gcd(a,b)            __gcd(a,b)
+#define      lcm(a,b)           (a*b)/gcd(a,b)
+#define      InTheNameOfGod      ios::sync_with_stdio(0);cin.tie(0); cout.tie(0);
+
+template <typename T>
+using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_statistics_node_update>;
+
+constexpr ll mod = 1e9 + 7;
+const ll N=3e6+5;
+const ll base=29;
+
+ll modpow(ll a,ll b,ll m){ll ans=1;while(b){if(b&1)ans=(ans*a)%m;b/=2;a=(a*a)%m;}return ans;}
+
+
+vector<ll> v1,v2; 
+vector<ll> adj1[N],adj2[N];
+ll lvl1[N],lvl2[N];
+ll subtree1[N],subtree2[N];
+ll hash1[N],hash2[N];
+ll subhash1[N],subhash2[N];
+bool vis1[N],vis2[N];
+ll n,m;
+
+void dfs1(ll v){
+    vis1[v] = true;
+    for (int u : adj1[v]) {
+        if (!vis1[u]){
+            lvl1[u]=lvl1[v]+1;
+            dfs1(u);
+            subtree1[v]+=subtree1[u];
+        }
+    }
+}
+void dfs2(ll v){
+    vis2[v] = true;
+    for (int u : adj2[v]) {
+        if (!vis2[u]){
+            lvl2[u]=lvl2[v]+1;
+            dfs2(u);
+            subtree2[v]+=subtree2[u];
+        }
+    }
+}
+void dfs11(ll v){
+    vis1[v] = true;
+    for (int u : adj1[v]) {
+        if (!vis1[u]){
+            dfs11(u);
+            hash1[u]= (((subtree1[u]*(modpow(base,lvl1[u],mod)))%mod ) + subhash1[u]) % mod;
+            subhash1[v]= (subhash1[v]+subhash1[u])%mod;
+            v1.push_back(hash1[u]);
+        }
+    }
+}
+void dfs22(ll v){
+    vis2[v] = true;
+    for (int u : adj2[v]) {
+        if (!vis2[u]){
+            dfs22(u);
+            hash2[u]= (((subtree2[u]*(modpow(base,lvl2[u],mod)))%mod ) + subhash2[u]) % mod;
+            subhash2[v]= (subhash2[v]+subhash2[u])%mod;
+            v2.push_back(hash2[u]);
+        }
+    }
+}
+
+void solve(){
+   cin>>n;
+   for(ll i=0;i<n-1;i++){
+        ll x,y; cin>>x>>y;
+        adj1[x].push_back(y); adj1[y].push_back(x);
+   }
+   for(ll i=0;i<n-1;i++){
+        ll x,y; cin>>x>>y;
+        adj2[x].push_back(y); adj2[y].push_back(x);
+   }
+   lvl1[1]=1,lvl2[1]=1;
+   for(ll i=1;i<=n;i++){
+    subtree1[i]=subtree2[i]=1;
+   }
+   
+   dfs1(1); dfs2(1);
+
+   memset(vis1,false,sizeof(vis1));
+   memset(vis2,false,sizeof(vis2));
+
+   dfs11(1); dfs22(1);
+
+   sort(all(v1)); sort(all(v2));
+
+   for(ll i=1;i<=n;i++)
+    cout<<i<<' '<<lvl1[i]<<' '<<subtree1[i]<<endl;
+
+   if(v1==v2) cout<<"Identical Tree"<<endl;
+   else cout<<"Not Identical Tree"<<endl;
+
+}
+
+int main(){
+   InTheNameOfGod;
+   ll Test=1;
+   //cin>>Test;
+   while(Test--){
+     solve();
+    }
+  return 0;
+}
+/*
+7
+1 2 
+2 3
+2 4
+2 5
+4 6
+1 7
+
+1 3
+3 2
+3 4
+3 5
+2 7
+1 6
+
+ans: Identical Tree
+
+*/
