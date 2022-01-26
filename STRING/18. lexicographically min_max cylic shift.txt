@@ -1,0 +1,82 @@
+//Find lexicographically min/max cylic shift
+//O(n)
+
+#include <bits/stdc++.h>
+#include <ext/pb_ds/assoc_container.hpp>
+#include <ext/pb_ds/tree_policy.hpp>
+using namespace std;
+using namespace __gnu_pbds;
+
+#define      ll                  long long
+#define      pb                 push_back
+#define      mp                 make_pair
+#define      all(x)             x.begin(),x.end()
+#define      Ceil(x,y)           ((x+y-1)/y)
+#define      gcd(a,b)            __gcd(a,b)
+#define      lcm(a,b)           (a*b)/gcd(a,b)
+#define      InTheNameOfGod      ios::sync_with_stdio(0);cin.tie(0); cout.tie(0);
+
+template <typename T>
+using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_statistics_node_update>;
+
+constexpr ll mod = 1e9 + 7;
+const ll N=3e6+5;
+
+
+ll minLexchar(string s){
+   int len= s.size();
+   int n= 2*len,i=0,j=1,k=0;
+   int a,b;
+   while(i+k<n && j+k<n){
+      a= (i+k>=len) ? s[i+k-len] : s[i+k];
+      b= (j+k>=len) ? s[j+k-len] : s[j+k];
+
+      if(a==b) k++;
+      else if(a>b){
+         i=i+k+1;
+         if(i<=j) i= j+1;
+         k=0;
+      }
+      else{
+         j = j+k+1;
+         if(j<=i) j=i+1;
+         k=0;
+      }
+   }
+
+   return min(i,j);
+}
+
+void solve(){
+   string s;
+   cin>>s;
+   ll ans= minLexchar(s);
+   cout<<"lexicographically min cylic shift start from: "<<ans<<endl;
+   string t=s;
+   for(ll i=0;i<t.size();i++){
+      ll dif= t[i]-'a';
+      t[i]= ('z'-dif);
+   }
+   //cout<<t<<endl; //abca -> zyxz
+   ans= minLexchar(t);
+   cout<<"lexicographically max cylic shift start from: "<<ans<<endl;
+
+
+}
+
+int main(){
+   InTheNameOfGod;
+   ll Test=1;
+   //cin>>Test;
+   while(Test--){
+     solve();
+    }
+  return 0;
+}
+/*
+abca
+
+ans: 
+lexicographically min cylic shift start from: 3  (aabc)
+lexicographically max cylic shift start from: 2 (caab)
+*/
