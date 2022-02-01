@@ -1,0 +1,24 @@
+//Find n number where all subaray xor is non-zero
+
+#include <bits/stdc++.h>
+using namespace std;
+int main(){
+  ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);
+  int t=1;
+  //cin>>t;
+  while(t--){
+    int n;
+    cin>>n;
+    for(int i = 0; i < n; i++){
+      cout<<(i ^ (i + 1))<<" ";
+    }
+    cout<<"\n";
+  }
+  return 0;
+}
+/*
+10
+
+ans:
+1 3 1 7 1 3 1 15 1 3
+*/

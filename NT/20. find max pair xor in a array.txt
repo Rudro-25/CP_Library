@@ -1,0 +1,71 @@
+//Find max xor of two number in a array
+//O(nlogn)
+
+#include <bits/stdc++.h>
+#include <ext/pb_ds/assoc_container.hpp>
+#include <ext/pb_ds/tree_policy.hpp>
+using namespace std;
+using namespace __gnu_pbds;
+
+#define      ll                  long long
+#define      pb                 push_back
+#define      mp                 make_pair
+#define      all(x)             x.begin(),x.end()
+#define      Ceil(x,y)           ((x+y-1)/y)
+#define      gcd(a,b)            __gcd(a,b)
+#define      lcm(a,b)           (a*b)/gcd(a,b)
+#define      InTheNameOfGod      ios::sync_with_stdio(0);cin.tie(0); cout.tie(0);
+
+template <typename T>
+using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_statistics_node_update>;
+
+constexpr ll mod = 1e9 + 7;
+const ll N=3e6+5;
+
+int findMaximumXOR(vector<int>& nums) {
+        int maxx=0, mask=0;
+        for(int i=31; i>=0; i--) {
+            mask = mask | (1<<i);
+            unordered_set<int> s;
+            for(auto &num : nums) s.insert(num & mask);
+            int newMaxx = maxx | (1<<i);
+            for(auto &prefix : s) {
+                if(s.find(newMaxx^prefix)!=s.end()) {
+                    maxx = newMaxx;
+                    break;
+                }
+            }
+        }
+        return maxx;
+    }
+
+void solve(){
+   ll n;
+   cin>>n;
+   vector<int> a(n);
+   for(ll i=0;i<n;i++) cin>>a[i];
+
+   ll ans= findMaximumXOR(a);
+   
+
+   cout<<ans<<endl;
+
+
+}
+
+int main(){
+   InTheNameOfGod;
+   ll Test=1;
+   //cin>>Test;
+   while(Test--){
+     solve();
+    }
+  return 0;
+}
+/*
+6
+3 10 5 25 2 8
+
+ans:
+28
+*/
