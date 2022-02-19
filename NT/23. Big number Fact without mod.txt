@@ -1,0 +1,44 @@
+//Big number Factorial without mod
+#include <iostream>
+using namespace std;
+
+int main() {
+ // your code goes here
+ int a;
+ cin>>a;
+ while(a--) {
+      int b, arr[200]={0};
+      cin>>b;
+      arr[0]=1;
+      int i=1, m=1, index=0, temp=0, x;
+      while(i<=b) {
+       int k=m;
+       index=0;
+       while(k--) {
+        x=arr[index]*i+temp;
+        arr[index]=x%10, temp=x/10, index++;
+       }
+       while(temp!=0) {
+        arr[index]=temp%10;
+        temp=temp/10;
+        index++, m++;
+       }
+       i++;
+      }
+      while(m--) cout<<arr[m];
+      cout<<endl;
+ }
+ return 0;
+}
+
+/*
+3
+3
+6
+10
+
+ans:
+6
+720
+3628800
+*/
