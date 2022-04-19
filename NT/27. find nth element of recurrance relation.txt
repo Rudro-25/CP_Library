@@ -1,0 +1,77 @@
+//find nth elelment of recurrance relation
+//https://www.hackerrank.com/challenges/fibonacci-finding-easy/problem
+//Given 1st & 2nd element.Find nth using Matrix Exponentiation.
+//O(logN) for every query
+
+#include<bits/stdc++.h>
+using namespace std;
+#define   ll               long long
+#define   InTheNameOfGod   ios::sync_with_stdio(0);cin.tie(0); cout.tie(0);
+
+const ll N = 105;
+const ll mod = 1e9 + 7;
+
+ll ar[3];
+ll I[3][3],T[3][3];
+void mul(ll A[3][3],ll B[3][3],int dim){
+   ll res[dim+1][dim+1];
+   for(ll i=1;i<=dim;i++){
+     for(ll j=1;j<=dim;j++){
+       res[i][j]=0;
+       for(ll k=1;k<=dim;k++){
+         res[i][j]= (res[i][j]%mod+(A[i][k]%mod*B[k][j]%mod)%mod)%mod;
+       }
+     }
+   }
+
+   for(ll i=1;i<=dim;i++){
+     for(ll j=1;j<=dim;j++){
+       A[i][j]=res[i][j];
+     }
+   }
+}
+ll getFib(int n){
+  if(n<=2) return ar[n];
+  I[1][1]=I[2][2]=1;
+  I[1][2]=I[2][1]=0;
+  T[1][1]=0;
+  T[1][2]=T[2][1]=T[2][2]=1;
+  n--;
+  while(n){
+    if(n%2) mul(I,T,2),n--;
+    else mul(T,T,2),n/=2;
+  }
+
+  ll Fn= (ar[1]*I[1][1]%mod + ar[2]*I[2][1]%mod)%mod;
+  return Fn;   
+}
+
+int main(){
+  InTheNameOfGod;
+
+   int Test=1,n;  
+   cin>>Test;
+   while(Test--){
+     cin>>ar[1]>>ar[2]>>n; n++;
+     cout<<getFib(n)<<endl;;
+
+   }
+   return 0;
+}
+/*
+2
+2 3
+1 0 
+1 1 
+3 3
+1 0 4 
+1 2 2 
+0 4 4 
+
+ans:
+1 0 
+3 1 
+17 112 116 
+15 88 100 
+28 144 160 
+*/
