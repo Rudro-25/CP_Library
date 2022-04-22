@@ -1,0 +1,48 @@
+//Given n. Find gcd(i,n) [1<=i<=n]
+// per_query solve O(sqrt(n))
+
+#include<bits/stdc++.h>
+using namespace std;
+
+const int N=1e5+5;
+#define ll long long
+
+ll phi[N];
+// every i er jonne 1 to i with i koto gula co-prime ase 
+ll co_prime_of_from_1_to_n(ll n){   //nloglogn complexity
+  phi[0]=0; phi[1]=1;
+  for(ll i=2;i<=n;i++) phi[i]=i;
+  for(ll i=2;i<=n;i++){
+    if(phi[i]==i){
+        for(ll j=i;j<=n;j+=i){
+            phi[j]-=phi[j]/i;
+            //phi[j]/=i; phi[j]*=(i-1);
+        }
+    }
+  }
+}
+
+int main(){
+   co_prime_of_from_1_to_n(N);
+   int Test=1;
+   cin>>Test;
+   while(Test--){
+       int n,ans=0; cin>>n;
+
+       for(ll i=1;i*i<=n;i++){
+         if(n%i==0){
+           ll d1=i,d2=n/i;
+           ans+= d1*phi[n/d1];
+           if(d1!=d2) ans+= d2*phi[n/d2];
+           //cout<<d1<<' '<<phi[n/d1]<<' '<<d2<<' '<<phi[n/d2]<<endl;
+         }
+       }
+       cout<<ans<<endl;
+   }
+   return 0;
+}
+/*
+12
+
+ans= 40 (1*4 + 2*2 + 3*2 + 4*2 + 6*1 + 12*1)
+*/
