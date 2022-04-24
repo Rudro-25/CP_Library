@@ -1,0 +1,86 @@
+//https://www.codechef.com/problems/QNUMBER
+
+#include <bits/stdc++.h>
+using namespace std;
+
+#define      PSB         push_back
+#define      ll          long long int
+#define      FastIO      ios::sync_with_stdio(0);cin.tie(0); cout.tie(0);
+
+map<ll,ll> PF;
+ll total_divisor=1;
+void factorization(ll n ){
+  for(ll i=2;i*i<=n;i++){
+    if(n%i==0){
+      int cnt=0;
+      while(n%i==0){
+        n/=i; cnt++;
+      }
+      PF[i]=cnt;
+      total_divisor*=(cnt+1);
+    }
+  }
+  if(n>1) PF[n]=1,total_divisor*=2;
+}
+
+
+int main(){
+  FastIO
+
+  ll Test=1; //cin>>Test;
+  while(Test--){
+    ll n,q; //cin>>n>>q;
+    scanf("%lld %lld",&n,&q);
+    factorization(n);
+    while(q--){
+      ll t,val; //cin>>t>>val;
+      scanf("%lld %lld",&t,&val);
+      if(t==1){
+        ll res=1;
+        for(auto it: PF){
+          ll ct=0;
+          while(val%it.first==0){
+            val/=it.first; ct++; 
+          }
+          res*= min(it.second,ct)+1;
+        }
+        //cout<<res<<endl;
+        printf("%lld\n",res);
+      }
+      else{
+         ll res=1;
+         for(auto it: PF){
+           ll ct=0;
+           while(val%it.first==0){
+             val/=it.first; ct++;
+           }
+           if(ct>it.second){
+             res=0; break;
+           }
+           res*=(it.second-ct+1);
+         }
+         if(val>1) res=0;
+         
+         if(t==2) printf("%lld\n",res);
+         else printf("%lld\n",total_divisor-res);
+      }
+    }
+  }
+
+  return 0;
+}
+
+/*
+2
+1 10
+3 5
+
+ans:
+2
+3
+5
+7
+
+3
+5
+*/
