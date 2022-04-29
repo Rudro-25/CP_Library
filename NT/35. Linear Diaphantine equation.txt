@@ -1,0 +1,51 @@
+//ax+by=c
+//given a,b,c find x,y
+
+#include<bits/stdc++.h>
+using namespace std;
+
+#define ll long long int
+ll cc;
+ll eea_gcd(ll a,ll b,ll& x,ll& y){
+  if(b==0){
+      x=1,y=0;
+      return a;
+  }
+  ll x1,y1;
+  ll d= eea_gcd(b,a%b,x1,y1);
+  x=y1;
+  y=x1-y1*(a/b);
+  return d;
+}
+bool find_any_solution(ll a,ll b,ll c,ll &x,ll &y){
+    ll x0,y0;
+    int g= eea_gcd(abs(a),abs(b),x0,y0);
+    if(c%g) return false;
+
+    x=x0*c/g;
+    y=y0*c/g;
+
+    if(a<0) x=-x;
+    if(b<0) y=-y;
+    return true;
+}
+
+int main(){
+   int Test=1;
+   //cin>>Test;
+   while(Test--){
+       ll a,b,c,x,y; cin>>a>>b>>c; 
+
+       if(find_any_solution(a,b,c,x,y)) cout<<x<<' '<<y<<endl;
+       else cout<<"No Solution exist"<<endl;
+   }
+   return 0;
+}
+/*
+5 3 24
+
+ans: -24 48
+
+3 5 6
+ans: 12 -6
+*/

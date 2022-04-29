@@ -1,0 +1,62 @@
+//Given mod[] & rem[i] for n numbers.num[i] pairwise coPrime.
+//Find smallest x such a%num[i]=rem[i].
+//mod[]/n[]= {3,4,5}
+//rem[]/a[]={2,3,1}
+
+#include<bits/stdc++.h>
+using namespace std;
+
+#define ll long long 
+const int mod=1e9+7;
+ll n,num[20],rem[20];
+#define pll pair<ll,ll>
+pll extnuc(ll a,ll b)
+{
+    if(b==0)return pll(1,0);
+    pll d=extnuc(b,a%b);
+    return pll(d.second,d.first-d.second*(a/b));
+}
+ll modi(ll n, ll M)
+{
+    pll d=extnuc(n,M);
+    return ((d.first%M)+M)%M;
+}
+ll chinese_reminder(int n){
+    ll prod=1;
+    for(ll i=0;i<n;i++) prod*=num[i];
+
+    ll res=0;
+    for(ll i=0;i<n;i++){
+        ll pp=prod/num[i];
+
+        ll inv=modi(pp,num[i]);
+
+        res= (res+ (rem[i]*pp*inv))%prod;
+
+        cout<<rem[i]<<' '<<pp<<' '<<inv<<endl;
+    }
+    return res;
+}
+
+
+int main(){
+   int Test=1;
+   //cin>>Test;
+   while(Test--){
+       cin>>n;
+       for(ll i=0;i<n;i++){
+           cin>>num[i]>>rem[i];
+       }
+       cout<<chinese_reminder(n)<<endl;
+   }
+   return 0;
+}
+/*
+3
+3 2
+4 3
+5 1
+
+ans: 
+11
+*/

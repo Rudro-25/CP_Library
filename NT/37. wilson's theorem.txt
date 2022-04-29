@@ -1,0 +1,49 @@
+//https://www.spoj.com/problems/DCEPC11B/
+//wilson's theorem
+//DCEPC11B - Boring Factorials
+
+#include<bits/stdc++.h>
+using namespace std;
+
+#define ll long long 
+const int mod=1e9+7;
+ll mulmod(ll a,ll b,ll m){ll x=0,y=a%m; while(b>0){if(b&1) x=(x+y)%m; y=(y*2LL)%m;b/=2;}return x%m;}
+ll modpow(ll a,ll b,ll m){ll ans=1;while(b){if(b&1)ans=mulmod(ans,a,m);b/=2;a=mulmod(a,a,m);}return ans%m;}
+
+ll wilson_theorem_factorial(ll n,ll prime){
+    ll fact=prime-1;
+    if(n>=prime){
+        fact=0;
+        return fact;
+    }
+    ll prod=1;
+    for(ll i=n+1;i<prime;i++){
+        prod=(prod*i)%prime;
+    }
+    fact=(fact*modpow(prod,prime-2,prime))%prime;
+    return fact;
+}
+
+
+int main(){
+   int Test=1;
+   cin>>Test;
+   while(Test--){
+       ll n,prime; cin>>n>>prime;
+       ll ans= wilson_theorem_factorial(n,prime);
+
+       cout<<ans<<endl;
+   }
+   return 0;
+}
+/*
+3
+2 5
+5 11
+21 71
+
+ans: 
+2
+10
+6
+*/
