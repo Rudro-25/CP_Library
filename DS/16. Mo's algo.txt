@@ -21,6 +21,15 @@ bool comp(query a,query b){
 
    return a.r < b.r;
 }
+// bool comp(query a,query b){
+//   int x= a.l/BLOCK;
+//   int y= b.l/BLOCK;
+
+//   if(x!=y) return x<y;
+
+//   if(x%2) return a.r<b.r;
+//   else return a.r > b.r;
+// }
 void add(int pos){
   freq[ar[pos]]++;
   if(freq[ar[pos]]==1) cnt++; 
